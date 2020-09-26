@@ -13,8 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 In this presentation we will use the plotly package to create several 
 interactive plots, using the "mpg" dataset. 
 
-Plotly can also be used with ggplot2, but in this presentation we will cover
-only a few basic plots.
+Plotly can also be used with ggplot2 to create more advanced plots, however, 
+in this presentation we will cover only a few basic plots.
 
 ## Load libraries
 ```{r libraries, message=FALSE, warning=FALSE}
@@ -58,6 +58,12 @@ dtime <- 1:150
 ## Create 3d scatterplot
 ```{r scatter3d, warning=FALSE, message=FALSE}
 plot_ly(x=tmp, y=pres, z=dtime, type="scatter3d", mode="markers", color=tmp)
+```
+
+## Plotly & ggplot2 (diamonds data)
+```{r ggplot, warning=FALSE, message=FALSE}
+plot_ly(ggplot2::diamonds, y = ~carat, color= ~cut, type = "box", 
+        boxpoints = "all", jitter = 0.3, pointpos = -1.8)
 ```
 
 ## Conclusion
