@@ -1,0 +1,67 @@
+---
+title: "Plotly Presentation"
+author: "Panayiotis L."
+date: "9/26/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Summary
+In this presentation we will use the plotly package to create several 
+interactive plots, using the "mpg" dataset. 
+
+Plotly can also be used with ggplot2, but in this presentation we will cover
+only a few basic plots.
+
+## Load libraries
+```{r libraries, message=FALSE, warning=FALSE}
+library(data.table)
+library(tidyr)
+library(dplyr)
+library(plotly)
+```
+
+## Requirements
+```{r info, comment="", echo=FALSE}
+sessionInfo()
+```
+
+## Load mpg data
+
+```{r data, comment=""}
+data("mpg")
+str(mpg)
+```
+
+## Create Boxplot
+```{r boxplot, warning=FALSE, message=FALSE}
+plot_ly(x=as.factor(mpg$cyl), y=mpg$hwy, type="box", color=as.factor(mpg$cyl))
+```
+
+## Create 2d scatterplot
+```{r scatterplot, warning=FALSE, message=FALSE}
+plot_ly(x=mpg$cty, y=mpg$hwy, type="scatter", color=as.factor(mpg$cyl))
+```
+
+## Generate 3d scatterplot data
+We will generate some random data for a 3 dimensional scatterplot.
+```{r scatter3d_data}
+set.seed(42)
+tmp <- rnorm(150, mean=20, sd=4)
+pres <- rnorm(150)
+dtime <- 1:150
+```
+
+## Create 3d scatterplot
+```{r scatter3d, warning=FALSE, message=FALSE}
+plot_ly(x=tmp, y=pres, z=dtime, type="scatter3d", mode="markers", color=tmp)
+```
+
+## Conclusion
+Plotly is a very useful package that can be used to create interactive graphs
+with little efford. It is very effective tool for R markdown presentations or
+reports.
+
