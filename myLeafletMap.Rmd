@@ -1,0 +1,85 @@
+---
+title: "Leaflet Interactive Map"
+author: "Panayiotis L."
+date: "9/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Summary
+In this report we will use the leaflet package to create an interactive map, 
+using the surface water dataset from the colorado.gov website.
+
+## Load libraries
+```{r libraries, message=FALSE, warning=FALSE}
+library(data.table)
+library(tidyr)
+library(dplyr)
+library(leaflet) 
+library(ggplot2)
+library(rjson)
+library(jsonlite)
+library(RCurl)
+```
+
+## Requirements
+```{r requirements}
+sessionInfo()
+```
+
+## About the data
+The [Colorado Information Marketplace](https://data.colorado.gov/) is a 
+comprehensive data warehouse that contains a wide range of Colorado-specific 
+open datasets available via a RESTful API called the Socrata Open Data API 
+(SODA). We will use this API to get water stations data for Colorado.
+
+## Getting the data
+
+In order to create an interactive map we need some data with coordinates. In this
+report we will use the surface water data along with leaflet. More specifically,
+we will:
+
+1. Request and get the data from the colorado.gov SODA API in R using fromJSON().
+2. Address column data types to ensure our quantitative data (number values) data 
+are in fact numeric.
+3. Remove missing values (NAs).
+
+```{r get_data, warning=FALSE}
+base_url <- "https://data.colorado.gov/resource/j5pc-4t32.json?"
+full_url <- paste0(base_url, "station_status=Active")
+water_data <- getURL(URLencode(full_url))
+
+water_data_df <- fromJSON(water_data) %>% 
+    flatten(recursive = TRUE)
+
+water_data_df <- water_data_df %>%
+    mutate_at(vars(amount, location.latitude, location.longitude), 
+              funs(as.numeric)) %>%
+    filter(!is.na(location.latitude))
+```
+
+## Leaflet Map
+Now we can use leaflet to create an interactive map with the water data. We will
+use clusters to ensure that our map is simple and clean. We also display the 
+water station name for each marker.
+
+```{r create_map}
+water_data_df$station_type <- factor(water_data_df$station_type)
+
+unique_markers_map <- leaflet(water_data_df) %>%
+    addTiles() %>%
+        addMarkers(clusterOptions = markerClusterOptions(), 
+                   lng=~location.longitude, lat=~location.latitude,
+                   popup=~station_name, label=~as.character(station_name))
+
+unique_markers_map
+```
+
+## Conclusion
+Using Leaflet we can easily generate a map with geo-spatial data. In our case 
+it was a map with the water stations of Colorado. 
+
+
