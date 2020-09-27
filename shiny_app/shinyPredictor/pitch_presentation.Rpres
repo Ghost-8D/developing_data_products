@@ -1,0 +1,53 @@
+Predicting diamond prices
+========================================================
+author: Panayiotis L.
+date: 27 Sep 2020
+autosize: false
+
+Modivation
+========================================================
+
+The price of diamonds is estimated based on many different factors. The owners
+of the diamonds need to know their worth before they sell them. We designed
+a shiny app, which tries to predict the price of diamonds based on two parameters:
+
+- Carat value
+- Cut type
+
+We designed two different linear models, one uses both variables and the other
+uses only the carat value to predict the price of diamonds. We used the diamonds
+dataset from the ggplot2 library to create our models.
+
+Let's take a look at the diamonds data.
+
+Diamonds data summary
+========================================================
+
+```{r , echo=FALSE}
+library(ggplot2); str(diamonds)
+```
+
+Diamond price per cut type
+========================================================
+
+```{r, echo=FALSE}
+ggplot(diamonds, aes(x=cut, y=price, fill=cut)) + 
+    geom_violin(trim=FALSE)+ 
+    geom_boxplot(width=0.1, fill="white") + theme_classic() +
+    labs(x="Cut type", y = "Price")
+#plot(diamonds$cut, diamonds$price, col=diamonds$cut, type='violin')
+```
+
+How to use the shinyPredictor
+========================================================
+
+The shinyPredictor is very simple to use and can be found here:
+<https://ghost-8d.shinyapps.io/shinyPredictor/>
+
+Steps:
+
+1. Select the carat value, using the 1st slider.
+2. Select the cut type, using the 2nd slider.
+3. Click on submit to get the predictions from the two linear models.
+
+You can follow the above steps and try different values.

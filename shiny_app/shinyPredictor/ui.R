@@ -10,6 +10,9 @@
 # Date: 27 Sep 2020
 # Version: 1.0
 #
+# Usage: Use the sliders to select values for carat and cut type and click submit
+# to get price predictions from the two linear models.
+#
 
 library(shiny)
 
